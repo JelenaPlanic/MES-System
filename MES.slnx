@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MES.API/MES.API.csproj" />
+  <Project Path="MES.Application/MES.Application.csproj" />
+  <Project Path="Mes.Domain/MES.Domain.csproj" />
+  <Project Path="MES.Infrastructure/MES.Infrastructure.csproj" />
+</Solution>
