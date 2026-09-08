@@ -11,7 +11,7 @@ namespace MES.Domain.Entities
         public WorkOrder WorkOrder { get; set; } = null!;
 
         public int DefectTypeId { get; set; }
-        public DefectType DefectType { get; set; } = null!;
+        public DefectType DefectType { get; set; } = null!; // sifarnik
 
         public int Quanity { get; set; } // koliko komada skartova
         public DateTime DetectedAt { get; set; } // evidencija defekta

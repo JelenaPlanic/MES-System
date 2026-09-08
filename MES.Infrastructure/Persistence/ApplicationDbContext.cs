@@ -6,9 +6,9 @@ using System.Text;
 
 namespace MES.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext // unit of work = transakcija, FLUENT API
     {
-        public DbSet<Product> Products => Set<Product>();
+        public DbSet<Product> Products => Set<Product>(); // expression-bodied prop
         public DbSet<Machine> Machines => Set<Machine>();
         public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
         public DbSet<Downtime> Downtimes => Set<Downtime>();
@@ -21,6 +21,12 @@ namespace MES.Infrastructure.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            // pronalazi sve klase koje implem IEntityTypeConf<> unutar istog assembly
         }
     }
 }

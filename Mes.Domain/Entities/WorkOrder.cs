@@ -22,6 +22,9 @@ namespace MES.Domain.Entities
         public int MachineId { get; set; }
         public Machine Machine { get; set; } = null!;
 
+        public int AssignedUserId { get; set; }
+        public User AssignedUser { get; set; } = null!;
+
         public int PlannedQuantity { get; set; }
         public int ProducedQuantity { get; set; }
 

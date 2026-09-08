@@ -1,7 +1,4 @@
 ﻿using MES.Domain.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MES.Domain.Entities
 {
@@ -16,7 +13,7 @@ namespace MES.Domain.Entities
     {
         public string Code { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public MachineStatus Status { get; set; }
+        public MachineStatus Status { get; set; } // EF CUVA ENUM U BAZI KAO int
         public ICollection<WorkOrder> WorkOrders { get; set; } = new List<WorkOrder>();
     }
 }
