@@ -31,6 +31,12 @@ namespace MES.Application.Mappings
             .ForMember(dest => dest.DowntimeReasonDescription, opt => opt.MapFrom(src => src.DowntimeReason.Description));
 
             CreateMap<CreateDowntimeDto, Downtime>();
+
+            CreateMap<Defect, DefectDto>()
+            .ForMember(dest => dest.WorkOrderNumber, opt => opt.MapFrom(src => src.WorkOrder.OrderNumber))
+            .ForMember(dest => dest.DefectTypeDescription, opt => opt.MapFrom(src => src.DefectType.Description));
+
+            CreateMap<CreateDefectDto, Defect>();
         }
     }
 }
