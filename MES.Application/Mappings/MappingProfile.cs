@@ -13,6 +13,9 @@ namespace MES.Application.Mappings
 
             CreateMap<Machine, MachineDto>();
             CreateMap<CreateMachineDto, Machine>();
+
+            CreateMap<DowntimeReason, DowntimeReasonDto>();
+            CreateMap<CreateDowntimeReasonDto, DowntimeReason>();
         }
     }
 }
