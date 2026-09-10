@@ -47,6 +47,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // servisi
 builder.Services.AddScoped<IProductServise, ProductService>();
+builder.Services.AddScoped<IMachineService, MachineService>();
 
 // autoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);

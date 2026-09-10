@@ -10,6 +10,9 @@ namespace MES.Application.Mappings
         {
             CreateMap<Product, ProductDto>(); // kad vracas podatke klijentu
             CreateMap<CreateProductDto, Product>(); // kad klijent salje data za kreiranje
+
+            CreateMap<Machine, MachineDto>();
+            CreateMap<CreateMachineDto, Machine>();
         }
     }
 }
