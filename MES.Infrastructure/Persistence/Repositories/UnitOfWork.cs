@@ -11,7 +11,7 @@ namespace MES.Infrastructure.Persistence.Repositories
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            Products = new GenericRepository<Product>(_context);
+            Products = new GenericRepository<Product>(_context); // vrednost se postavi 1, zauvek, pri kreiranju objekta
             Machines = new GenericRepository<Machine>(_context);
             WorkOrders = new GenericRepository<WorkOrder>(_context);
             Downtimes = new GenericRepository<Downtime>(_context);
@@ -22,7 +22,7 @@ namespace MES.Infrastructure.Persistence.Repositories
             Shifts = new GenericRepository<Shift>(_context);
         }
 
-        public IGenericRepository<Product> Products { get; }
+        public IGenericRepository<Product> Products { get; } // get-only auto prop, nema set, jedino mesto gde moze da dob vr, jeste ctor.
 
         public IGenericRepository<Machine> Machines {  get; }
 

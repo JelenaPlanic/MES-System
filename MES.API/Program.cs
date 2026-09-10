@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MES.Infrastructure.Persistence;
+using MES.Application.Interfaces;
+using MES.Infrastructure.Persistence.Repositories;
+using MES.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,11 @@ builder.Services.AddOpenApi();
 // registracija
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// servisi
+builder.Services.AddScoped<IProductServise, ProductService>();
 
 var app = builder.Build();
 
