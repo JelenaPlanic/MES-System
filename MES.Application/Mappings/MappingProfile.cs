@@ -19,6 +19,9 @@ namespace MES.Application.Mappings
 
             CreateMap<DefectType, DefectTypeDto>();
             CreateMap<CreateDefectTypeDto,  DefectType>();
+
+            CreateMap<Shift, ShiftDto>();
+            CreateMap<CreateShiftDto, Shift>();
         }
     }
 }
