@@ -22,6 +22,9 @@ namespace MES.Application.Mappings
 
             CreateMap<Shift, ShiftDto>();
             CreateMap<CreateShiftDto, Shift>();
+
+            CreateMap<WorkOrder, WorkOrderDto>()
+            .ForMember(dest => dest.AssignedUserName, opt => opt.MapFrom(src => src.AssignedUser.FullName));
         }
     }
 }

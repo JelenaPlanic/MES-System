@@ -51,6 +51,7 @@ builder.Services.AddScoped<IMachineService, MachineService>();
 builder.Services.AddScoped<IDowntimeReasonService, DowntimeReasonService>();
 builder.Services.AddScoped<IDefectTypeService, DefectTypeService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IWorkOrderService, WorkOrderService>();
 
 // autoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
