@@ -2,7 +2,6 @@
 using MES.Application.DTOs;
 using MES.Application.Interfaces;
 using MES.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MES.API.Controllers

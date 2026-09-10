@@ -1,15 +1,43 @@
-using Microsoft.EntityFrameworkCore;
-using MES.Infrastructure.Persistence;
 using MES.Application.Interfaces;
-using MES.Infrastructure.Persistence.Repositories;
-using MES.Application.Services;
 using MES.Application.Mappings;
+using MES.Application.Services;
+using MES.Infrastructure.Persistence;
+using MES.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
+const string schemeId = "Bearer";
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+options.SwaggerDoc("v1", new OpenApiInfo
+{
+    Title = "MES API",
+    Version = "v1",
+    Description = "Informacioni sistem za podrsku izvrsavanju proizvodnje"
+});
+
+    // Definicija JWT autentifikacije u Swagger UI
+    options.AddSecurityDefinition(schemeId, new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Unesi JWT token u formatu: Bearer {token}"
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference(schemeId, document)] = new List<string>()
+    });
+});
+
 
 // registracija
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,7 +56,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
