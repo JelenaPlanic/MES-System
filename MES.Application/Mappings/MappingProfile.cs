@@ -25,6 +25,12 @@ namespace MES.Application.Mappings
 
             CreateMap<WorkOrder, WorkOrderDto>()
             .ForMember(dest => dest.AssignedUserName, opt => opt.MapFrom(src => src.AssignedUser.FullName));
+
+            CreateMap<Downtime, DowntimeDto>()
+            .ForMember(dest => dest.WorkOrderNumber, opt => opt.MapFrom(src => src.WorkOrder.OrderNumber))
+            .ForMember(dest => dest.DowntimeReasonDescription, opt => opt.MapFrom(src => src.DowntimeReason.Description));
+
+            CreateMap<CreateDowntimeDto, Downtime>();
         }
     }
 }
