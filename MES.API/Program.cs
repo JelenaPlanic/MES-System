@@ -3,6 +3,7 @@ using MES.Infrastructure.Persistence;
 using MES.Application.Interfaces;
 using MES.Infrastructure.Persistence.Repositories;
 using MES.Application.Services;
+using MES.Application.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // servisi
 builder.Services.AddScoped<IProductServise, ProductService>();
+
+// autoMapper
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
 var app = builder.Build();
 
