@@ -67,4 +67,15 @@ public class WorkOrdersController : ControllerBase
         await _workOrderService.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpGet("{id}/oee")] // mapira na GET /api/workorders/5/oee 
+    public async Task<ActionResult<OeeResultDto>> GetOee(int id)
+    {
+        var result = await _workOrderService.CalculateOeeAsync(id);
+
+        if (result is null)
+            return NotFound("Radni nalog ne postoji ili nije zavrsen.");
+
+        return Ok(result);
+    }
 }

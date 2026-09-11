@@ -1,4 +1,5 @@
-﻿using MES.Application.Interfaces;
+﻿using MES.Application.DTOs;
+using MES.Application.Interfaces;
 using MES.Domain.Entities;
 
 namespace MES.Application.Services;
@@ -49,5 +50,45 @@ public class WorkOrderService : IWorkOrderService
             _unitOfWork.WorkOrders.Delete(workOrder);
             await _unitOfWork.SaveChangesAsync();
         }
+    }
+
+    public async Task<OeeResultDto?> CalculateOeeAsync(int workOrderId)
+    {
+        var workOrder = await _unitOfWork.WorkOrders.GetByIdAsync(workOrderId,
+            w => w.DownTimes,
+            w => w.Defects,
+            w => w.Product);
+
+        if (workOrder is null || workOrder.Status != WorkOrderStatus.Completed)
+            return null;
+
+        if (workOrder.ActualStart is null || workOrder.ActualEnd is null)
+            return null;
+
+        var plannedMinutes = (workOrder.ActualEnd.Value - workOrder.ActualStart.Value).TotalMinutes;
+        var downtimeMinutes = workOrder.DownTimes  // samo zastoji koji imaju kraj
+            .Where(d => d.EndTime is not null)
+            .Sum(d => (d.EndTime!.Value - d.StartTime).TotalMinutes); // sabira njihova trajanja
+
+        var availability = OeeCalculationService.CalculateAvailability(plannedMinutes, downtimeMinutes);
+
+        var runTimeMinutes = plannedMinutes - downtimeMinutes;
+        var performance = OeeCalculationService.CalculatePerformance(
+            workOrder.ProducedQuantity, workOrder.Product.CycleTimeSeconds, runTimeMinutes);
+
+        var defectQuantity = workOrder.Defects.Sum(d => d.Quanity); // kolicina izmeni
+        var quality = OeeCalculationService.CalculateQuality(workOrder.ProducedQuantity, defectQuantity);
+
+        var oee = OeeCalculationService.CalculateOee(availability, performance, quality);
+
+        return new OeeResultDto
+        {
+            WorkOrderId = workOrder.Id,
+            OrderNumber = workOrder.OrderNumber,
+            Availability = availability,
+            Performance = performance,
+            Quality = quality,
+            Oee = oee
+        };
     }
 }
