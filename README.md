@@ -47,6 +47,4 @@ Ključne relacije: jedan `Product`/`Machine`/`User` ima više `WorkOrder`-a; jed
 4. Pokreni aplikaciju (`Ctrl+F5` u Visual Studiju, ili `dotnet run --project MES.API`)
 5. Swagger UI se automatski otvara na `/swagger`
 
-## Autor
 
-Jelena — master studije, Informacioni menadžment, FTN Novi Sad
