@@ -1,4 +1,5 @@
 ﻿using MES.Application.DTOs;
+using MES.Application.QueryParameters;
 using MES.Domain.Entities;
 
 namespace MES.Application.Interfaces;
@@ -12,4 +13,6 @@ public interface IWorkOrderService
     Task DeleteAsync(int id);
 
     Task<OeeResultDto> CalculateOeeAsync(int workOrderId);
+    // filter pass - through
+    Task<IEnumerable<WorkOrder>> GetFilteredAsync(WorkOrderQueryParameters query);
 }

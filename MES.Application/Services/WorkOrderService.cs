@@ -1,17 +1,21 @@
 ﻿using MES.Application.DTOs;
 using MES.Application.Exceptions;
 using MES.Application.Interfaces;
+using MES.Application.QueryParameters;
 using MES.Domain.Entities;
+using System.Net;
 
-namespace MES.Application.Services;
+namespace MES.Application.Services { 
 
 public class WorkOrderService : IWorkOrderService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IWorkOrderRepository _workOrderRepository;
 
-    public WorkOrderService(IUnitOfWork unitOfWork)
+        public WorkOrderService(IUnitOfWork unitOfWork, IWorkOrderRepository repo)
     {
         _unitOfWork = unitOfWork;
+        _workOrderRepository = repo;
     }
 
     public async Task<IEnumerable<WorkOrder>> GetAllAsync()
@@ -95,4 +99,12 @@ public class WorkOrderService : IWorkOrderService
             Oee = oee
         };
     }
+
+        // filter:
+    public async Task<IEnumerable<WorkOrder>> GetFilteredAsync(WorkOrderQueryParameters query)
+    {
+         return await _workOrderRepository.GetFilteredAsync(query); 
+        
+    }
+}
 }

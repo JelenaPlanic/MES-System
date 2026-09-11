@@ -44,5 +44,14 @@ namespace MES.Infrastructure.Persistence.Repositories
 
         public void Delete(T entity) => _dbSet.Remove(entity);  // priprema promenu
 
+        public IQueryable<T> GetQueryable(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+                query = query.Include(include);
+            return query;
+        }
+        
+
     }
 }

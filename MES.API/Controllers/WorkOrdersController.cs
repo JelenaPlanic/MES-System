@@ -3,6 +3,7 @@ using AutoMapper;
 using MES.Application.Interfaces;
 using MES.Application.DTOs;
 using MES.Domain.Entities;
+using MES.Application.QueryParameters;
 
 namespace MES.API.Controllers;
 
@@ -20,9 +21,9 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<WorkOrderDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<WorkOrderDto>>> GetAll([FromQuery] WorkOrderQueryParameters query)
     {
-        var workOrders = await _workOrderService.GetAllAsync();
+        var workOrders = await _workOrderService.GetFilteredAsync(query);
         return Ok(_mapper.Map<IEnumerable<WorkOrderDto>>(workOrders));
     }
 

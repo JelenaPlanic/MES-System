@@ -11,5 +11,8 @@ namespace MES.Application.Interfaces
         Task AddAsync(T entity);
         void Update(T entity); // nije async, markiranje ent u memoriji kao izmenjen
         void Delete(T entity); // markiranje ent u memoriji kao obrisan
+
+        // filtriranje:
+        IQueryable<T> GetQueryable(params Expression<Func<T, object>>[] includes); // ne izvrsava upit odmah
     }
 }

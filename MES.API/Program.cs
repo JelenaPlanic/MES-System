@@ -56,6 +56,9 @@ builder.Services.AddScoped<IWorkOrderService, WorkOrderService>();
 builder.Services.AddScoped<IDowntimeService, DowntimeService>();
 builder.Services.AddScoped<IDefectService, DefectService>();
 
+// repos
+builder.Services.AddScoped<IWorkOrderRepository, WorkOrderRepository>();
+
 // autoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
