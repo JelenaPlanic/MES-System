@@ -1,7 +1,5 @@
 # MES sistem — Informacioni sistem za podršku izvršavanju proizvodnje
 
-Projektni zadatak iz predmeta **AUPS** (Analiza i upravljanje poslovnim sistemima), Fakultet tehničkih nauka, Univerzitet u Novom Sadu, školska 2025/2026.
-
 Tema: *Sistemi za podršku izvršavanju proizvodnje — Primena u industriji (Manufacturing Execution Systems)*
 
 ## O projektu
