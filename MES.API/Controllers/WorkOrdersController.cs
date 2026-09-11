@@ -50,12 +50,16 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, CreateWorkOrderDto updateDto)
+    public async Task<IActionResult> Update(int id, UpdateWorkOrderDto updateDto)
     {
         var workOrder = await _workOrderService.GetByIdAsync(id);
         if (workOrder is null) return NotFound();
 
-        _mapper.Map(updateDto, workOrder);
+        workOrder.Status = updateDto.Status;
+        workOrder.ProducedQuantity = updateDto.ProducedQuantity;
+        workOrder.ActualStart = updateDto.ActualStart;
+        workOrder.ActualEnd= updateDto.ActualEnd;
+
         await _workOrderService.UpdateAsync(workOrder);
 
         return NoContent();
