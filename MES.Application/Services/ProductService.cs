@@ -1,16 +1,19 @@
 ﻿
 using MES.Application.Interfaces;
+using MES.Application.QueryParameters;
 using MES.Domain.Entities;
 
 namespace MES.Application.Services
 {
-    public class ProductService: IProductServise
+    public class ProductService : IProductServise
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductRepository _productRepository;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, IProductRepository productRepository)
         {
             _unitOfWork = unitOfWork;
+            _productRepository = productRepository;
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync() // cist pass-through
@@ -32,7 +35,7 @@ namespace MES.Application.Services
 
         public async Task UpdateAsync(Product product)
         {
-             _unitOfWork.Products.Update(product); // nije async (menja samo stanje u memoriji),
+            _unitOfWork.Products.Update(product); // nije async (menja samo stanje u memoriji),
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -47,10 +50,10 @@ namespace MES.Application.Services
 
         }
 
-        
+        public async Task<PagedResult<Product>> GetPagedAsync(PaginationParameters parameters)
+        {
+            return await _productRepository.GetPagedAsync(parameters);
 
-        
-
-       
+        }
     }
 }

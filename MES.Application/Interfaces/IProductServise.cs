@@ -1,4 +1,5 @@
-﻿using MES.Domain.Entities;
+﻿using MES.Application.QueryParameters;
+using MES.Domain.Entities;
 
 namespace MES.Application.Interfaces
 {
@@ -10,6 +11,9 @@ namespace MES.Application.Interfaces
         Task<Product> CreateAsync(Product product); // prima novi, vraca popunjen sa ID
         Task UpdateAsync(Product product); // azurira postojeci, ne vraca nista 
         Task DeleteAsync(int id); // brise po ID
+
+        // pagination and sort:
+        Task<PagedResult<Product>> GetPagedAsync(PaginationParameters parameters);
     }
 
     // sloj opravdan ili suvisan?

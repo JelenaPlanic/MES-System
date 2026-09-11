@@ -58,6 +58,7 @@ builder.Services.AddScoped<IDefectService, DefectService>();
 
 // repos
 builder.Services.AddScoped<IWorkOrderRepository, WorkOrderRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // autoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);

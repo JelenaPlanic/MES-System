@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MES.Application.DTOs;
 using MES.Application.Interfaces;
+using MES.Application.QueryParameters;
 using MES.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +20,28 @@ namespace MES.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet] // mapira se na GET /api/products
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
+        //[HttpGet] // mapira se na GET /api/products
+        //public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
+        //{
+        //    var products = await _productService.GetAllAsync();
+        //    var dtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+        //    return Ok(dtos);
+        //}
+
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<ProductDto>>> GetAll([FromQuery] PaginationParameters parameters)
         {
-            var products = await _productService.GetAllAsync();
-            var dtos = _mapper.Map<IEnumerable<ProductDto>>(products);
-            return Ok(dtos);
+            var pagedProducts = await _productService.GetPagedAsync(parameters);
+
+            var result = new PagedResult<ProductDto>
+            {
+                Items = _mapper.Map<IEnumerable<ProductDto>>(pagedProducts.Items),
+                PageNumber = pagedProducts.PageNumber,
+                PageSize = pagedProducts.PageSize,
+                TotalCount = pagedProducts.TotalCount
+            };
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")] // mapira se na GET /api/products/5 iz URl, AUTOM SE POVEZE SA PAR
