@@ -1,4 +1,5 @@
 ﻿using MES.Application.DTOs;
+using MES.Application.Exceptions;
 using MES.Application.Interfaces;
 using MES.Domain.Entities;
 
@@ -52,7 +53,7 @@ public class WorkOrderService : IWorkOrderService
         }
     }
 
-    public async Task<OeeResultDto?> CalculateOeeAsync(int workOrderId)
+    public async Task<OeeResultDto> CalculateOeeAsync(int workOrderId)
     {
         var workOrder = await _unitOfWork.WorkOrders.GetByIdAsync(workOrderId,
             w => w.DownTimes,
@@ -60,10 +61,13 @@ public class WorkOrderService : IWorkOrderService
             w => w.Product);
 
         if (workOrder is null || workOrder.Status != WorkOrderStatus.Completed)
-            return null;
+            throw new NotFoundException($"Radni nalog sa Id {workOrderId} ne postoji");
+
+        if (workOrder.Status != WorkOrderStatus.Completed)
+            throw new ValidationException("OEE se moze izracunati samo za zavrsene radne naloge.");
 
         if (workOrder.ActualStart is null || workOrder.ActualEnd is null)
-            return null;
+            throw new ValidationException("Radni nalog nema uneto stvarno vreme pocetka odnosno kraja.");
 
         var plannedMinutes = (workOrder.ActualEnd.Value - workOrder.ActualStart.Value).TotalMinutes;
         var downtimeMinutes = workOrder.DownTimes  // samo zastoji koji imaju kraj

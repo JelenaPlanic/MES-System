@@ -1,3 +1,4 @@
+using MES.API.Middleware;
 using MES.Application.Interfaces;
 using MES.Application.Mappings;
 using MES.Application.Services;
@@ -66,6 +67,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization(); // middleware za authorizaciju

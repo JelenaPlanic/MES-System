@@ -77,9 +77,6 @@ public class WorkOrdersController : ControllerBase
     {
         var result = await _workOrderService.CalculateOeeAsync(id);
 
-        if (result is null)
-            return NotFound("Radni nalog ne postoji ili nije zavrsen.");
-
         return Ok(result);
     }
 }
