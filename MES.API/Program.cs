@@ -1,16 +1,18 @@
 using MES.API.Middleware;
+using MES.Application.Features.Auth;
 using MES.Application.Interfaces;
 using MES.Application.Mappings;
 using MES.Application.Services;
+using MES.Domain.Entities;
+using MES.Infrastructure.Auth;
 using MES.Infrastructure.Persistence;
 using MES.Infrastructure.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
-using MES.Application.Features.Auth;
-using MES.Infrastructure.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,11 @@ options.SwaggerDoc("v1", new OpenApiInfo
 // registracija
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// auth
+builder.Services.AddIdentity<User, IdentityRole<int>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // JWT konfiguracija
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
