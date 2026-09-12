@@ -16,7 +16,6 @@ namespace MES.Application.Interfaces
         IGenericRepository<DowntimeReason> DowntimeReasons { get; }
         IGenericRepository<Defect> Defects { get; }
         IGenericRepository<DefectType> DefectTypes { get; }
-        IGenericRepository<User> Users { get; }
         IGenericRepository<Shift> Shifts { get; }
     } 
     // Jedan objekat tipa IUnitOfWork ti daje pristup svim repos plus metoda za snimanje

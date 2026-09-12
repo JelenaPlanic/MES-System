@@ -18,7 +18,6 @@ namespace MES.Infrastructure.Persistence.Repositories
             DowntimeReasons = new GenericRepository<DowntimeReason>(_context);
             Defects = new GenericRepository<Defect>(_context);
             DefectTypes = new GenericRepository<DefectType>(_context);
-            Users = new GenericRepository<User>(_context);
             Shifts = new GenericRepository<Shift>(_context);
         }
 
@@ -35,8 +34,6 @@ namespace MES.Infrastructure.Persistence.Repositories
         public IGenericRepository<Defect> Defects  {  get; }
 
         public IGenericRepository<DefectType> DefectTypes  {  get; }
-
-        public IGenericRepository<User> Users { get; }
 
         public IGenericRepository<Shift> Shifts { get; }
 

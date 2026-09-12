@@ -6,6 +6,11 @@ using MES.Infrastructure.Persistence;
 using MES.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using MES.Application.Features.Auth;
+using MES.Infrastructure.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +49,29 @@ options.SwaggerDoc("v1", new OpenApiInfo
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// JWT konfiguracija
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"]!;
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+});
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // servisi
@@ -63,6 +91,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 // autoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
+// TOKEN
+builder.Services.AddScoped<ITokenService, TokenService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -73,9 +103,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 app.UseHttpsRedirection();
-app.UseAuthorization(); // middleware za authorizaciju
+app.UseAuthentication(); //cita token
+app.UseAuthorization(); // provera dozvola
 app.MapControllers();
 
 app.Run();
