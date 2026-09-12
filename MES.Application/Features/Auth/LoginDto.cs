@@ -2,7 +2,7 @@
 
 namespace MES.Infrastructure.Auth
 {
-    internal class LoginDto
+    public class LoginDto
     {
 
         [Required(ErrorMessage = "Email je obavezan.")]

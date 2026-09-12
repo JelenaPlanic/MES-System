@@ -40,5 +40,29 @@ namespace MES.API.Controllers
             return Ok(new {message = "Registracija uspesna. Prijavite se."});
            
         }
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
+        {
+            var user = await _userMagager.FindByEmailAsync(loginDto.Email);
+
+            if(user is null)
+            {
+                return Unauthorized("Pogresan email ili lozinka.");
+            }
+
+            var isPasswordValid = await _userMagager.CheckPasswordAsync(user, loginDto.Password);
+
+            if (!isPasswordValid)
+            {
+                return Unauthorized("Pogresna email ili lozinka.");
+            }
+
+            var token = _tokenService.GenerateToken(user);
+
+            return Ok(new AuthResponseDto
+            {
+                Token = token, Email = user.Email, FullName = user.FullName, Role = user.Role.ToString()
+            });
+        }
     }
 }
