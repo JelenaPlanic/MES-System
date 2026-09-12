@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using MES.Application.Interfaces;
+﻿using AutoMapper;
 using MES.Application.DTOs;
+using MES.Application.Interfaces;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DefectsController : ControllerBase
 {
     private readonly IDefectService _service;
@@ -59,6 +61,7 @@ public class DefectsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.DeleteAsync(id);

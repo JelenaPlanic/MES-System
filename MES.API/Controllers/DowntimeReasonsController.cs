@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using MES.Application.Interfaces;
+﻿using AutoMapper;
 using MES.Application.DTOs;
+using MES.Application.Interfaces;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DowntimeReasonsController : ControllerBase
 {
     private readonly IDowntimeReasonService _service;
@@ -35,6 +37,7 @@ public class DowntimeReasonsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<DowntimeReasonDto>> Create(CreateDowntimeReasonDto createDto)
     {
         var reason = _mapper.Map<DowntimeReason>(createDto);
@@ -44,6 +47,7 @@ public class DowntimeReasonsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, CreateDowntimeReasonDto updateDto)
     {
         var reason = await _service.GetByIdAsync(id);
@@ -54,6 +58,7 @@ public class DowntimeReasonsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.DeleteAsync(id);

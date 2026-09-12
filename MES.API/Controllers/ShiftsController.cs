@@ -3,11 +3,13 @@ using AutoMapper;
 using MES.Application.Interfaces;
 using MES.Application.DTOs;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ShiftsController : ControllerBase
 {
     private readonly IShiftService _service;
@@ -35,6 +37,7 @@ public class ShiftsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Manager,Admin")]
     public async Task<ActionResult<ShiftDto>> Create(CreateShiftDto createDto)
     {
         var shift = _mapper.Map<Shift>(createDto);
@@ -44,6 +47,7 @@ public class ShiftsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Manager,Admin")]
     public async Task<IActionResult> Update(int id, CreateShiftDto updateDto)
     {
         var shift = await _service.GetByIdAsync(id);
@@ -54,6 +58,7 @@ public class ShiftsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Manager,Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.DeleteAsync(id);

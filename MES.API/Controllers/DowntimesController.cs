@@ -3,11 +3,13 @@ using AutoMapper;
 using MES.Application.Interfaces;
 using MES.Application.DTOs;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DowntimesController : ControllerBase
 {
     private readonly IDowntimeService _service;
@@ -59,6 +61,7 @@ public class DowntimesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.DeleteAsync(id);

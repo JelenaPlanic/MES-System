@@ -3,12 +3,14 @@ using MES.Application.DTOs;
 using MES.Application.Interfaces;
 using MES.Application.QueryParameters;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MES.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductServise _productService;
@@ -19,14 +21,6 @@ namespace MES.API.Controllers
             _productService = productServise;
             _mapper = mapper;
         }
-
-        //[HttpGet] // mapira se na GET /api/products
-        //public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
-        //{
-        //    var products = await _productService.GetAllAsync();
-        //    var dtos = _mapper.Map<IEnumerable<ProductDto>>(products);
-        //    return Ok(dtos);
-        //}
 
         [HttpGet]
         public async Task<ActionResult<PagedResult<ProductDto>>> GetAll([FromQuery] PaginationParameters parameters)
@@ -57,7 +51,9 @@ namespace MES.API.Controllers
             return Ok(dto);
         }
 
+
         [HttpPost] // mapira se na POST /api/products
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<ActionResult<ProductDto>> Create(CreateProductDto createDto)
         {
             var product = _mapper.Map<Product>(createDto);
@@ -68,6 +64,7 @@ namespace MES.API.Controllers
         }
 
         [HttpPut("{id}")] // mapira se na GET /api/products/5 iz URl, AUTOM SE POVEZE SA PAR
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<IActionResult>Update(int id, CreateProductDto updateDto)
         {
             var product = await _productService.GetByIdAsync(id);
@@ -83,6 +80,7 @@ namespace MES.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _productService.DeleteAsync(id);

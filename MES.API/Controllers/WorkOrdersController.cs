@@ -4,11 +4,13 @@ using MES.Application.Interfaces;
 using MES.Application.DTOs;
 using MES.Domain.Entities;
 using MES.Application.QueryParameters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class WorkOrdersController : ControllerBase
 {
     private readonly IWorkOrderService _workOrderService;
@@ -67,6 +69,7 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _workOrderService.DeleteAsync(id);

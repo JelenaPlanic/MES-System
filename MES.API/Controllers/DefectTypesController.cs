@@ -3,11 +3,13 @@ using AutoMapper;
 using MES.Application.Interfaces;
 using MES.Application.DTOs;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DefectTypesController : ControllerBase
 {
     private readonly IDefectTypeService _service;
@@ -35,6 +37,7 @@ public class DefectTypesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<DefectTypeDto>> Create(CreateDefectTypeDto createDto)
     {
         var type = _mapper.Map<DefectType>(createDto);
@@ -44,6 +47,7 @@ public class DefectTypesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, CreateDefectTypeDto updateDto)
     {
         var type = await _service.GetByIdAsync(id);
@@ -54,6 +58,7 @@ public class DefectTypesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.DeleteAsync(id);

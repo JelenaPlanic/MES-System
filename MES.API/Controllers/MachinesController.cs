@@ -3,11 +3,13 @@ using AutoMapper;
 using MES.Application.Interfaces;
 using MES.Application.DTOs;
 using MES.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MES.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MachinesController : ControllerBase
 {
     private readonly IMachineService _machineService;
@@ -35,6 +37,7 @@ public class MachinesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<ActionResult<MachineDto>> Create(CreateMachineDto createDto)
     {
         var machine = _mapper.Map<Machine>(createDto);
@@ -44,6 +47,7 @@ public class MachinesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<IActionResult> Update(int id, CreateMachineDto updateDto)
     {
         var machine = await _machineService.GetByIdAsync(id);
@@ -54,6 +58,7 @@ public class MachinesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _machineService.DeleteAsync(id);
